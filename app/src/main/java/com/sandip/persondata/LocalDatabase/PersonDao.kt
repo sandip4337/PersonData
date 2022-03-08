@@ -3,6 +3,7 @@ package com.sandip.persondata.LocalDatabase
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.sandip.persondata.data.Person
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PersonDao {
@@ -22,5 +23,8 @@ interface PersonDao {
 
     @Query("SELECT * FROM PersonTable ORDER BY Id ASC")
     fun getInfo(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM PersonTable WHERE FirstName LIKE :searchQuery OR LastName LIKE :searchQuery")
+    fun searchDatabase(searchQuery:String): Flow<List<Person>>
 
 }

@@ -3,6 +3,7 @@ package com.sandip.persondata.ViewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.sandip.persondata.LocalDatabase.PersonDatabase
 import com.sandip.persondata.Reository.Repository
@@ -44,5 +45,10 @@ class MainViewModel(application: Application):AndroidViewModel(application) {
             repository.deleteAllUser()
         }
     }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Person>> {
+        return repository.searchDatabase(searchQuery).asLiveData()
+    }
+
 
 }

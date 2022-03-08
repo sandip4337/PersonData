@@ -1,16 +1,24 @@
 package com.sandip.persondata
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.sandip.persondata.ViewModel.MainViewModel
 import com.sandip.persondata.data.Person
 import kotlinx.android.synthetic.main.person_data_row.view.*
 
-class ListAdapter :RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
+class ListAdapter(private val context: Context, private var mainViewModel: MainViewModel):RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
 
     private var personlist = emptyList<Person>()
+
+
 
     fun setdata(items:List<Person>){
         this.personlist = items
@@ -37,12 +45,20 @@ class ListAdapter :RecyclerView.Adapter<ListAdapter.MyViewHolder>(){
             holder.itemView.findNavController().navigate(action)
         }
 
+        holder.itemView.deletebtn.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setPositiveButton("Yes"){ _,_ ->
 
+                mainViewModel.deleteUser(item)
 
-//        holder.itemView.deletebtn.setOnClickListener {
-//            val action = ListFragmentDirections.actionListFragmentToAddFragment(item)
-//            holder.itemView.
-//        }
+                Toast.makeText(context,"Successfully Removed: ${item.FirstName}"
+                        , Toast.LENGTH_SHORT).show()
+            }
+            builder.setNegativeButton("No"){_,_ -> }
+            builder.setTitle("Delete ${item.FirstName}?")
+            builder.setMessage("Are You Sure , You Want To Delete ${item.FirstName}?")
+            builder.create().show()
+        }
     }
 
     override fun getItemCount(): Int {

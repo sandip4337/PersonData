@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.sandip.persondata.ViewModel.MainViewModel
 import com.sandip.persondata.data.Person
-import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_update.*
 import kotlinx.android.synthetic.main.fragment_update.view.*
 
@@ -38,10 +37,6 @@ class UpdateFragment : Fragment() {
         view.updatebutton.setOnClickListener {
             updatepersondata()
         }
-
-//      add menu
-        setHasOptionsMenu(true)
-
         return view
     }
 
@@ -64,37 +59,4 @@ class UpdateFragment : Fragment() {
     private fun inputCheck(firstName: String, lastName: String, age: Editable):Boolean{
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.delete_menu, menu)
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.deleteItem){
-            deleteUser()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun deleteUser() {
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes"){ _,_ ->
-
-            mainViewModel.deleteUser(args.currentPerson)
-
-            Toast.makeText(requireContext(),"Successfully Removed: ${args.currentPerson.FirstName}"
-                , Toast.LENGTH_SHORT).show()
-
-            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-
-        }
-        builder.setNegativeButton("No"){_,_ -> }
-        builder.setTitle("Delete ${args.currentPerson.FirstName}?")
-        builder.setMessage("Are You Sure , You Want To Delete ${args.currentPerson.FirstName}?")
-        builder.create().show()
-    }
-
-
 }

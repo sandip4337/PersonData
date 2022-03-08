@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sandip.persondata.LocalDatabase.PersonDao
 import com.sandip.persondata.LocalDatabase.PersonDatabase
 import com.sandip.persondata.data.Person
+import kotlinx.coroutines.flow.Flow
 
 class Repository(private val personDao: PersonDao) {
 
@@ -25,6 +26,10 @@ class Repository(private val personDao: PersonDao) {
 
     suspend fun deleteAllUser(){
         personDao.deleteAllPerson()
+    }
+
+    fun searchDatabase(searchQuery: String): Flow<List<Person>> {
+        return personDao.searchDatabase(searchQuery)
     }
 
 }

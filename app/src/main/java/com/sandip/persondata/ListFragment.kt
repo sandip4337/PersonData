@@ -3,6 +3,7 @@ package com.sandip.persondata
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,9 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sandip.persondata.ViewModel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(){
 
     lateinit var mainViewModel: MainViewModel
+    lateinit var adapter: ListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,12 +31,14 @@ class ListFragment : Fragment() {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
-        val adapter = ListAdapter()
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        adapter = ListAdapter(requireContext(),mainViewModel)
         val recyclerView = view.Recylerview
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
 
         mainViewModel.personInfo.observe(viewLifecycleOwner, Observer {
 
@@ -45,8 +49,13 @@ class ListFragment : Fragment() {
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.delete_menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater){
+        inflater.inflate(R.menu.main_menu, menu)
+
+//        val search = menu.findItem(R.id.menu_search)
+//        val searchView = search?.actionView as? SearchView
+//        searchView?.isSubmitButtonEnabled = true
+//        searchView?.setOnQueryTextListener(this)
 
     }
 
@@ -73,5 +82,29 @@ class ListFragment : Fragment() {
         builder.setMessage("Are You Sure , You Want To Delete Everything?")
         builder.create().show()
     }
+
+//    override fun onQueryTextSubmit(query: String?): Boolean {
+//        if (query != null){
+//            searchDatabase(query)
+//        }
+//        return true
+//    }
+//
+//    override fun onQueryTextChange(query: String?): Boolean {
+//        if (query != null){
+//            searchDatabase(query)
+//        }
+//        return true
+//    }
+//
+//    private fun searchDatabase(query: String){
+//        val searchQuery = "%$query%"
+//
+//        mainViewModel.searchDatabase(searchQuery).observe(this,{list ->
+//            list.let {
+//                adapter.setdata(it)
+//            }
+//        })
+//    }
 
 }
